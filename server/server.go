@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	"github.com/cnosuke/mcp-greeting/config"
-	"github.com/cnosuke/mcp-greeting/greeter"
+	"github.com/cnosuke/mcp-mysql/config"
+	"github.com/cnosuke/mcp-mysql/greeter"
 	"github.com/cockroachdb/errors"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"

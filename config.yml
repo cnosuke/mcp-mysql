@@ -1,4 +1,4 @@
-log: 'mcp-greeting.log'
+log: 'mcp-mysql.log'
 debug: false
 
 greeting:

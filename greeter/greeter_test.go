@@ -3,7 +3,7 @@ package greeter
 import (
 	"testing"
 
-	"github.com/cnosuke/mcp-greeting/config"
+	"github.com/cnosuke/mcp-mysql/config"
 	"github.com/stretchr/testify/assert"
 )
 

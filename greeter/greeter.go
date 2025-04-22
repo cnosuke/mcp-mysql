@@ -1,7 +1,7 @@
 package greeter
 
 import (
-	"github.com/cnosuke/mcp-greeting/config"
+	"github.com/cnosuke/mcp-mysql/config"
 	"go.uber.org/zap"
 )
 

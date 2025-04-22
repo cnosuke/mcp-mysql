@@ -3,7 +3,7 @@ package server
 import (
 	"testing"
 
-	"github.com/cnosuke/mcp-greeting/greeter"
+	"github.com/cnosuke/mcp-mysql/greeter"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"

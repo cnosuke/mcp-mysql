@@ -1,4 +1,4 @@
-module github.com/cnosuke/mcp-greeting
+module github.com/cnosuke/mcp-mysql
 
 go 1.24.0
 

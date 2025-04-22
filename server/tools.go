@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 
-	"github.com/cnosuke/mcp-greeting/greeter"
+	"github.com/cnosuke/mcp-mysql/greeter"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"go.uber.org/zap"
