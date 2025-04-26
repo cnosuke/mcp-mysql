@@ -8,9 +8,16 @@ import (
 type Config struct {
 	Log    string `yaml:"log" default:"" env:"LOG_PATH"`
 	Debug  bool   `yaml:"debug" default:"false" env:"DEBUG"`
-	Greeting struct {
-		DefaultMessage string `yaml:"default_message" default:"Hello!" env:"GREETING_DEFAULT_MESSAGE"`
-	} `yaml:"greeting"`
+	MySQL struct {
+		Host          string `yaml:"host" default:"localhost" env:"MYSQL_HOST"`
+		User          string `yaml:"user" default:"root" env:"MYSQL_USER"`
+		Password      string `yaml:"password" default:"" env:"MYSQL_PASSWORD"`
+		Port          int    `yaml:"port" default:"3306" env:"MYSQL_PORT"`
+		Database      string `yaml:"database" default:"" env:"MYSQL_DATABASE"`
+		DSN           string `yaml:"dsn" default:"" env:"MYSQL_DSN"`
+		ReadOnly      bool   `yaml:"read_only" default:"false" env:"MYSQL_READ_ONLY"`
+		ExplainCheck  bool   `yaml:"explain_check" default:"false" env:"MYSQL_EXPLAIN_CHECK"`
+	} `yaml:"mysql"`
 }
 
 // LoadConfig - Load configuration file

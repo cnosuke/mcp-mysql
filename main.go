@@ -18,7 +18,7 @@ var (
 	Revision = "xxx"
 
 	Name  = "mcp-mysql"
-	Usage = "A simple MCP server implementation for greetings"
+	Usage = "A MCP server implementation for MySQL"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		{
 			Name:    "server",
 			Aliases: []string{"s"},
-			Usage:   "A simple MCP server implementation for greetings",
+			Usage:   "Run the MCP MySQL server",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
 					Name:    "config",

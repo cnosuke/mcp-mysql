@@ -1,5 +1,12 @@
 log: 'mcp-mysql.log'
 debug: false
 
-greeting:
-  default_message: "こんにちは！"
+mysql:
+  host: 'localhost'
+  user: 'root'
+  password: ''
+  port: 3306
+  database: ''
+  dsn: ''
+  read_only: false
+  explain_check: false
