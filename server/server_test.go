@@ -33,6 +33,11 @@ func TestGetDB(t *testing.T) {
 	_, err = GetDB(cfg, "user:pass@tcp(localhost:3306)/testdb")
 	assert.Error(t, err) // Error expected since we're not connecting to a real DB
 
+	// Test with URL-style DSN
+	DB = nil
+	_, err = GetDB(cfg, "mysql://user:pass@localhost:3306/testdb")
+	assert.Error(t, err) // Error expected since we're not connecting to a real DB
+
 	// Test with empty configuration and no toolDSN
 	DB = nil
 	emptyCfg := &config.Config{}
@@ -44,4 +49,24 @@ func TestGetDB(t *testing.T) {
 	DB = nil
 	_, err = GetDB(emptyCfg, "user:pass@tcp(localhost:3306)/testdb")
 	assert.Error(t, err) // Error expected since we're not connecting to a real DB
+
+	// Test with empty configuration but with URL-style toolDSN
+	DB = nil
+	_, err = GetDB(emptyCfg, "mysql://user:pass@localhost:3306/testdb")
+	assert.Error(t, err) // Error expected since we're not connecting to a real DB
+}
+
+func TestIsURLStyle(t *testing.T) {
+	// Test valid URL-style DSNs
+	assert.True(t, isURLStyle("mysql://user:pass@localhost:3306/dbname"))
+	assert.True(t, isURLStyle("mysql://localhost/dbname"))
+	assert.True(t, isURLStyle("mariadb://user:pass@localhost/dbname"))
+	assert.True(t, isURLStyle("memsql://user@host/db"))
+	assert.True(t, isURLStyle("tidb://127.0.0.1:4000/test"))
+	
+	// Test non-URL-style DSNs
+	assert.False(t, isURLStyle("user:pass@tcp(localhost:3306)/dbname"))
+	assert.False(t, isURLStyle("root:@tcp(localhost:3306)/note"))
+	assert.False(t, isURLStyle("/var/run/mysqld/mysqld.sock"))
+	assert.False(t, isURLStyle(""))
 }

@@ -4,11 +4,12 @@ MCP MySQL Server is a Go-based MCP server implementation that provides MySQL dat
 
 ## Features
 
-* MCP Compliance: Provides a JSON‐RPC based interface for tool execution according to the MCP specification.
-* MySQL Operations: Supports database operations such as querying, schema inspection, and (optionally) data manipulation.
-* Read-Only Mode: Optional restriction to prevent data modification operations.
-* Query Plan Verification: Optional EXPLAIN analysis to verify query safety.
-* Minimal Container: Built with Google's distroless for improved security and smaller image size.
+- MCP Compliance: Provides a JSON‐RPC based interface for tool execution according to the MCP specification.
+- MySQL Operations: Supports database operations such as querying, schema inspection, and (optionally) data manipulation.
+- Read-Only Mode: Optional restriction to prevent data modification operations.
+- Query Plan Verification: Optional EXPLAIN analysis to verify query safety.
+- URL-Style Connection Strings: Supports standard URL-style database connection strings like `mysql://user:pass@host:port/dbname`.
+- Minimal Container: Built with Google's distroless for improved security and smaller image size.
 
 ## Requirements
 
@@ -56,10 +57,7 @@ To integrate with Claude Desktop using Docker, add an entry to your `claude_desk
   "mcpServers": {
     "mysql": {
       "command": "docker",
-      "args": [
-        "run", "-i", "--rm",
-        "cnosuke/mcp-mysql:latest"
-      ],
+      "args": ["run", "-i", "--rm", "cnosuke/mcp-mysql:latest"],
       "env": {
         "MYSQL_HOST": "your-mysql-host",
         "MYSQL_PORT": "3306",
@@ -114,11 +112,12 @@ To integrate with Claude Desktop using the Go binary, add an entry to your `clau
 
 This project uses Google's distroless container images for the final Docker image. The `gcr.io/distroless/static` base image provides:
 
-* Minimal attack surface - only the necessary components are included
-* Smaller image size - no shell, package manager, or other unnecessary binaries
-* Improved security - reduced number of potential vulnerabilities
+- Minimal attack surface - only the necessary components are included
+- Smaller image size - no shell, package manager, or other unnecessary binaries
+- Improved security - reduced number of potential vulnerabilities
 
 The Docker image is built using a multi-stage build process:
+
 1. First stage uses Go Alpine to build the application
 2. Second stage uses distroless/static with just the compiled binary
 
@@ -163,6 +162,7 @@ If no connection information is provided in any of these ways, the server will r
 - `mysql.explain_check`: Check query plan with `EXPLAIN` before executing
 
 You can override configurations using environment variables:
+
 - `LOG_PATH`: Path to log file
 - `DEBUG`: Enable debug mode (true/false)
 - `MYSQL_HOST`: MySQL server hostname
@@ -190,79 +190,81 @@ MCP clients interact with the server by sending JSON‐RPC requests to execute v
 
 1. `list_database`
 
-    - List all databases in the MySQL server.
-    - Parameters:
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: A list of matching database names.
+   - List all databases in the MySQL server.
+   - Parameters:
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: A list of matching database names.
 
 2. `list_table`
 
-    - List all tables in the MySQL server.
-    - Parameters:
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: A list of matching table names.
+   - List all tables in the MySQL server.
+   - Parameters:
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: A list of matching table names.
 
 3. `create_table` (not available in read-only mode)
 
-    - Create a new table in the MySQL server.
-    - Parameters:
-        - `query`: The SQL query to create the table.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: x rows affected.
+   - Create a new table in the MySQL server.
+   - Parameters:
+     - `query`: The SQL query to create the table.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: x rows affected.
 
 4. `alter_table` (not available in read-only mode)
 
-    - Alter an existing table in the MySQL server. The LLM is informed not to drop an existing table or column.
-    - Parameters:
-        - `query`: The SQL query to alter the table.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: x rows affected.
+   - Alter an existing table in the MySQL server. The LLM is informed not to drop an existing table or column.
+   - Parameters:
+     - `query`: The SQL query to alter the table.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: x rows affected.
 
 5. `desc_table`
 
-    - Describe the structure of a table.
-    - Parameters:
-        - `name`: The name of the table to describe.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: The structure of the table.
+   - Describe the structure of a table.
+   - Parameters:
+     - `name`: The name of the table to describe.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: The structure of the table.
 
 ### Data Tools
 
 1. `read_query`
 
-    - Execute a read-only SQL query.
-    - Parameters:
-        - `query`: The SQL query to execute.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: The result of the query.
+   - Execute a read-only SQL query.
+   - Parameters:
+     - `query`: The SQL query to execute.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: The result of the query.
 
 2. `write_query` (not available in read-only mode)
 
-    - Execute a write SQL query.
-    - Parameters:
-        - `query`: The SQL query to execute.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: x rows affected, last insert id: <last_insert_id>.
+   - Execute a write SQL query.
+   - Parameters:
+     - `query`: The SQL query to execute.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: x rows affected, last insert id: <last_insert_id>.
 
 3. `update_query` (not available in read-only mode)
 
-    - Execute an update SQL query.
-    - Parameters:
-        - `query`: The SQL query to execute.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: x rows affected.
+   - Execute an update SQL query.
+   - Parameters:
+     - `query`: The SQL query to execute.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: x rows affected.
 
 4. `delete_query` (not available in read-only mode)
 
-    - Execute a delete SQL query.
-    - Parameters:
-        - `query`: The SQL query to execute.
-        - `dsn` (optional): MySQL DSN string to override configuration.
-    - Returns: x rows affected.
+   - Execute a delete SQL query.
+   - Parameters:
+     - `query`: The SQL query to execute.
+     - `dsn` (optional): MySQL DSN string to override configuration.
+   - Returns: x rows affected.
 
 ## MySQL DSN Format
 
-For the `dsn` parameter or `mysql.dsn` configuration option, the format is:
+The `dsn` parameter or `mysql.dsn` configuration option can be specified in two formats:
+
+### 1. Native MySQL DSN Format
 
 ```
 [username[:password]@][protocol[(address)]]/dbname[?param1=value1&...&paramN=valueN]
@@ -270,7 +272,18 @@ For the `dsn` parameter or `mysql.dsn` configuration option, the format is:
 
 Example: `username:password@tcp(localhost:3306)/mydb?parseTime=true&loc=Local`
 
-Please refer to [MySQL DSN](https://github.com/go-sql-driver/mysql#dsn-data-source-name) for more details.
+Please refer to [MySQL DSN](https://github.com/go-sql-driver/mysql#dsn-data-source-name) for more details on this format.
+
+### 2. URL-Style Connection Format
+
+```
+mysql://username:password@hostname:port/dbname?param1=value1&param2=value2
+```
+
+Example: `mysql://root:pass@localhost:3306/mydb?parseTime=true&loc=Local`
+
+This URL-style format is automatically converted to the native MySQL DSN format.
+Supported URL schemes include: `mysql://`, `mariadb://`.
 
 ## Command-Line Parameters
 
