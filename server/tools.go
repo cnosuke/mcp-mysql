@@ -147,8 +147,7 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	// Register handlers for each tool
 	mcpServer.AddTool(listDatabaseTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		// Get DSN from tool parameter or config
-		dsn, _ := request.Params.Arguments["dsn"].(string)
+		dsn := request.GetString("dsn", "")
 		result, err := HandleQuery(cfg, "SHOW DATABASES", StatementTypeNoExplainCheck, dsn)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
@@ -157,8 +156,7 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 	})
 
 	mcpServer.AddTool(listTableTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		// Get DSN from tool parameter or config
-		dsn, _ := request.Params.Arguments["dsn"].(string)
+		dsn := request.GetString("dsn", "")
 		result, err := HandleQuery(cfg, "SHOW TABLES", StatementTypeNoExplainCheck, dsn)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
@@ -168,9 +166,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	if !cfg.MySQL.ReadOnly {
 		mcpServer.AddTool(createTableTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			query := request.Params.Arguments["query"].(string)
-			// Get DSN from tool parameter or config
-			dsn, _ := request.Params.Arguments["dsn"].(string)
+			query, err := request.RequireString("query")
+			if err != nil {
+				return mcp.NewToolResultError(err.Error()), nil
+			}
+			dsn := request.GetString("dsn", "")
 			result, err := HandleExec(cfg, query, StatementTypeNoExplainCheck, dsn)
 			if err != nil {
 				return mcp.NewToolResultError(err.Error()), nil
@@ -181,9 +181,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	if !cfg.MySQL.ReadOnly {
 		mcpServer.AddTool(alterTableTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			query := request.Params.Arguments["query"].(string)
-			// Get DSN from tool parameter or config
-			dsn, _ := request.Params.Arguments["dsn"].(string)
+			query, err := request.RequireString("query")
+			if err != nil {
+				return mcp.NewToolResultError(err.Error()), nil
+			}
+			dsn := request.GetString("dsn", "")
 			result, err := HandleExec(cfg, query, StatementTypeNoExplainCheck, dsn)
 			if err != nil {
 				return mcp.NewToolResultError(err.Error()), nil
@@ -193,9 +195,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 	}
 
 	mcpServer.AddTool(descTableTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		name := request.Params.Arguments["name"].(string)
-		// Get DSN from tool parameter or config
-		dsn, _ := request.Params.Arguments["dsn"].(string)
+		name, err := request.RequireString("name")
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+		dsn := request.GetString("dsn", "")
 		result, err := HandleDescTable(cfg, name, dsn)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
@@ -204,9 +208,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 	})
 
 	mcpServer.AddTool(readQueryTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		query := request.Params.Arguments["query"].(string)
-		// Get DSN from tool parameter or config
-		dsn, _ := request.Params.Arguments["dsn"].(string)
+		query, err := request.RequireString("query")
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+		dsn := request.GetString("dsn", "")
 		result, err := HandleQuery(cfg, query, StatementTypeSelect, dsn)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
@@ -216,9 +222,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	if !cfg.MySQL.ReadOnly {
 		mcpServer.AddTool(writeQueryTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			query := request.Params.Arguments["query"].(string)
-			// Get DSN from tool parameter or config
-			dsn, _ := request.Params.Arguments["dsn"].(string)
+			query, err := request.RequireString("query")
+			if err != nil {
+				return mcp.NewToolResultError(err.Error()), nil
+			}
+			dsn := request.GetString("dsn", "")
 			result, err := HandleExec(cfg, query, StatementTypeInsert, dsn)
 			if err != nil {
 				return mcp.NewToolResultError(err.Error()), nil
@@ -229,9 +237,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	if !cfg.MySQL.ReadOnly {
 		mcpServer.AddTool(updateQueryTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			query := request.Params.Arguments["query"].(string)
-			// Get DSN from tool parameter or config
-			dsn, _ := request.Params.Arguments["dsn"].(string)
+			query, err := request.RequireString("query")
+			if err != nil {
+				return mcp.NewToolResultError(err.Error()), nil
+			}
+			dsn := request.GetString("dsn", "")
 			result, err := HandleExec(cfg, query, StatementTypeUpdate, dsn)
 			if err != nil {
 				return mcp.NewToolResultError(err.Error()), nil
@@ -242,9 +252,11 @@ func RegisterAllTools(mcpServer *server.MCPServer, cfg *config.Config) error {
 
 	if !cfg.MySQL.ReadOnly {
 		mcpServer.AddTool(deleteQueryTool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			query := request.Params.Arguments["query"].(string)
-			// Get DSN from tool parameter or config
-			dsn, _ := request.Params.Arguments["dsn"].(string)
+			query, err := request.RequireString("query")
+			if err != nil {
+				return mcp.NewToolResultError(err.Error()), nil
+			}
+			dsn := request.GetString("dsn", "")
 			result, err := HandleExec(cfg, query, StatementTypeDelete, dsn)
 			if err != nil {
 				return mcp.NewToolResultError(err.Error()), nil
